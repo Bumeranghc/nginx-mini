@@ -20,8 +20,16 @@ on:
         type: string
   push:
     branches: [ "main" ]
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE'
   pull_request:
     branches: [ "main" ]
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE'
+    types:
+      - closed
 
 env:
   NGINX_VERSION: ${{ github.event.inputs.nginx_version || '1.24.0' }}

@@ -1,5 +1,7 @@
 # Nginx Mini Image
 
+![Build Status](https://github.com/Bumeranghc/nginx-mini/actions/workflows/docker-image.yaml/badge.svg?branch=main)
+
 This repository contains a Dockerfile for building a minimal Nginx image with custom configurations and static content. The image is designed to run as a rootless user and includes gzip compression, CORS headers for static assets, and a custom MIME types configuration.
 
 ## Features
