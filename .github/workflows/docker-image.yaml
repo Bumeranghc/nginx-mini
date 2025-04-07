@@ -1,0 +1,67 @@
+name: Docker Image CI
+
+on:
+  workflow_dispatch:
+    inputs:
+      nginx_version:
+        description: 'Nginx version to use'
+        required: true
+        default: '1.24.0'
+        type: string
+      nginx_patch:
+        description: 'Nginx patch version to use'
+        required: true
+        default: '2ubuntu7.3'
+        type: string
+      timezone:
+        description: 'Timezone to use'
+        required: true
+        default: 'Asia/Jerusalem'
+        type: string
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  NGINX_VERSION: ${{ github.event.inputs.nginx_version || '1.24.0' }}
+  NGINX_PATCH: ${{ github.event.inputs.nginx_patch || '2ubuntu7.3' }}
+  TIMEZONE: 'Asia/Jerusalem'
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-24.04
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Docker Login
+      uses: docker/login-action@v3.3.0
+      with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+    
+    - name: Extract metadata (tags, labels) for Docker
+      id: meta
+      uses: docker/metadata-action@v5.7.0
+      with:
+        images: bumeranghc/nginx-mini
+        tags: |
+          type=raw,value={{date 'YYYYMMDD-HHmmss' tz='${{ env.TIMEZONE }}'}}
+          type=raw,value=${{ github.event.inputs.nginx_version || env.NGINX_VERSION }}_${{ github.event.inputs.nginx_patch || env.NGINX_PATCH }}
+
+    - name: Build and push Docker image
+      id: push
+      uses: docker/build-push-action@v6.15.0
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        build-args: |
+          VERSION=${{ github.event.inputs.nginx_version || env.NGINX_VERSION }}
+          PATCH=${{ github.event.inputs.nginx_patch || env.NGINX_PATCH }}
+          TIMEZONE=${{ github.event.inputs.timezone || env.TIMEZONE }}
