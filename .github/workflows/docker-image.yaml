@@ -59,7 +59,6 @@ jobs:
         tags: |
           type=raw,value=${{ github.event.inputs.nginx_version || env.NGINX_VERSION }}_${{ github.event.inputs.nginx_patch || env.NGINX_PATCH }}
           type=raw,value=${{ github.event.inputs.nginx_version || env.NGINX_VERSION }}
-        readme: README.md
 
     - name: Build and push Docker image
       id: push
@@ -74,3 +73,9 @@ jobs:
           VERSION=${{ github.event.inputs.nginx_version || env.NGINX_VERSION }}
           PATCH=${{ github.event.inputs.nginx_patch || env.NGINX_PATCH }}
           TIMEZONE=${{ github.event.inputs.timezone || env.TIMEZONE }}
+
+    - name: Update Docker Hub Description
+      uses: peter-evans/dockerhub-description@v4
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
