@@ -4,6 +4,8 @@
 
 This repository contains a Dockerfile for building a minimal Nginx image with custom configurations and static content. The image is designed to run as a rootless user and includes gzip compression, CORS headers for static assets, and a custom MIME types configuration.
 
+The built image is available at [Docker Hub](https://hub.docker.com/r/bumeranghc/nginx-mini).
+
 ## Features
 
 - Builds and installs Nginx from source using Ubuntu environment.

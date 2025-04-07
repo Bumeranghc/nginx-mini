@@ -59,6 +59,7 @@ jobs:
         tags: |
           type=raw,value=${{ github.event.inputs.nginx_version || env.NGINX_VERSION }}_${{ github.event.inputs.nginx_patch || env.NGINX_PATCH }}
           type=raw,value=${{ github.event.inputs.nginx_version || env.NGINX_VERSION }}
+        readme: README.md
 
     - name: Build and push Docker image
       id: push
