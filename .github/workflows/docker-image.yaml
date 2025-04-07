@@ -26,7 +26,7 @@ on:
 env:
   NGINX_VERSION: ${{ github.event.inputs.nginx_version || '1.24.0' }}
   NGINX_PATCH: ${{ github.event.inputs.nginx_patch || '2ubuntu7.3' }}
-  TIMEZONE: 'Asia/Jerusalem'
+  TIMEZONE: ${{ github.event.inputs.nginx_patch || 'Asia/Jerusalem' }}
 
 jobs:
 
@@ -51,6 +51,7 @@ jobs:
         tags: |
           type=raw,value={{date 'YYYYMMDD-HHmmss' tz='${{ env.TIMEZONE }}'}}
           type=raw,value=${{ github.event.inputs.nginx_version || env.NGINX_VERSION }}_${{ github.event.inputs.nginx_patch || env.NGINX_PATCH }}
+          type=raw,value=${{ github.event.inputs.nginx_version || env.NGINX_VERSION }}
 
     - name: Build and push Docker image
       id: push
